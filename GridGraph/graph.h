@@ -1,3 +1,6 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 typedef struct e {
 	int vertex;
 	double weight;
@@ -9,3 +12,5 @@ typedef struct g {
 	int height;
 	edge_list **list;
 } *graph;
+
+#endif

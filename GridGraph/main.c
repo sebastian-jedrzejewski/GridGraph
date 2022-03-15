@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// ENTRY FUNCTION
+// ENTRY POINT
 int main(int argc, char* argv[]) {
-
+    
 }

@@ -4,12 +4,12 @@
 #include "helpers.h"
 
 
-// DRAW RANDOM INTEGER FROM RANGE
-int rand_range_int(int lower, int upper)
+// REMOVE ELEMENT AT INDEX FROM ARRAY (INT)
+void int_array_remove_at(int* array, int length, int index)
 {
-    // Set seed
-    srand(time(0));
-
-    // Draw and return
-    return (rand() % (upper - lower + 1)) + lower;
+    int i;
+    for(i = index; i < length - 1; i++)
+    {
+        array[i] = array[i + 1];
+    }
 }

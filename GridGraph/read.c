@@ -9,17 +9,6 @@
 
 
 
-// Manages the read mode
-int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
-{   
-    graph g = read_graph(file);
-    if(g == NULL)
-        return 1;
-    else
-        return 0;
-}
-
-
 // Reads a graph from a file and saves it to the structure
 graph read_graph(FILE *f)
 {
@@ -57,4 +46,15 @@ graph read_graph(FILE *f)
     free(vertices);
     free(weights);
     return g;
+}
+
+
+// Manages the read mode
+int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
+{   
+    graph g = read_graph(file);
+    if(g == NULL)
+        return 1;
+    else
+        return 0;
 }

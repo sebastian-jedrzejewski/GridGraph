@@ -8,13 +8,14 @@
 
 
 
+// CONSTANTS
+const int ec_drawing_weight[5] = {1, 2, 4, 8, 16};
+
+
 // GENERATE GRAPH
 graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max)
 {
     srand(time(0));
-
-    // Edges counts drawing weight
-    const int ec_drawing_weight[5] = {1, 2, 4, 8, 16};
 
     // Sum of weights
     int ec_weight_sum = 0;
@@ -50,37 +51,37 @@ graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_
     
     for (int i = 0; i < width * height; i++)
     {
-        // Get available vertexes
-        int available_vertexes[4];
-        int available_vertexes_count = 0;
+        // Get available vertices
+        int available_vertices[4];
+        int available_vertices_count = 0;
         if (i % width != 0 && edge_list_length(graph->list[i-1]) < edge_count_array[i-1] && !edge_list_contains_vertex(graph->list[i], i - 1)) // Left (i-1)
         {
-            available_vertexes[available_vertexes_count] = i - 1;
-            available_vertexes_count++;
+            available_vertices[available_vertices_count] = i - 1;
+            available_vertices_count++;
         }
         if ((i + 1) % width != 0 && edge_list_length(graph->list[i+1]) < edge_count_array[i+1] && !edge_list_contains_vertex(graph->list[i], i + 1)) // Right (i+1)
         {
-            available_vertexes[available_vertexes_count] = i + 1;
-            available_vertexes_count++;
+            available_vertices[available_vertices_count] = i + 1;
+            available_vertices_count++;
         }
         if (i - width >= 0 && edge_list_length(graph->list[i-width]) < edge_count_array[i-width] && !edge_list_contains_vertex(graph->list[i], i - width)) // Up (i-width)
         {
-            available_vertexes[available_vertexes_count] = i - width;
-            available_vertexes_count++;
+            available_vertices[available_vertices_count] = i - width;
+            available_vertices_count++;
         }
         if (i + width < width * height && edge_list_length(graph->list[i+width]) < edge_count_array[i+width] && !edge_list_contains_vertex(graph->list[i], i + width)) // Down (i+width)
         {
-            available_vertexes[available_vertexes_count] = i + width;
-            available_vertexes_count++;
+            available_vertices[available_vertices_count] = i + width;
+            available_vertices_count++;
         }
 
         // Create edges
-        while (edge_list_length(graph->list[i]) < edge_count_array[i] && available_vertexes_count > 0)
+        while (edge_list_length(graph->list[i]) < edge_count_array[i] && available_vertices_count > 0)
         {
-            int index = rand() % available_vertexes_count;
-            int vertex = available_vertexes[index];
-            int_array_remove_at(available_vertexes, available_vertexes_count, index);
-            available_vertexes_count--;
+            int index = rand() % available_vertices_count;
+            int vertex = available_vertices[index];
+            int_array_remove_at(available_vertices, available_vertices_count, index);
+            available_vertices_count--;
 
             float weight = rand() / (RAND_MAX / (edge_weight_max - edge_weight_min));
 
@@ -97,16 +98,21 @@ graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_
 // MAIN WRITE MODE FUNCTION
 void write(FILE* file, int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max) 
 {
-    graph graph = gen_graph(6,6,0,1,3,4);
-    for (int i = 0; i < graph->height*graph->width; i++)
+    // Generate graph
+    graph graph = gen_graph(width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);
+
+    // Write graph to file
+    fprintf(file, "%d %d\n", height, width);
+    for (int i = 0; i < width * height; i++)
     {
-        printf("\n%d: ", i);
+        fprintf(file, "\t");
         edge_list* edge_list = graph->list[i];
         while (edge_list)
         {
-            printf("%d,", edge_list->vertex);
+            fprintf(file, " %d :%f ", edge_list->vertex, edge_list->weight);
             edge_list = edge_list->next;
         }
+        fprintf(file, "\n");
     }
 }
 

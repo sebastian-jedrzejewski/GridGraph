@@ -4,10 +4,16 @@
 // Creates a new graph
 graph initialize_graph(int w, int h)
 {
+    int i;
+
     graph g = malloc(sizeof *g);
     g->height = h;
     g->width = w;
     g->list = malloc(w * h * sizeof *(g->list));
+
+    for(i = 0; i < w * h; i++)
+        g->list[i] = NULL;
+        
     return g;
 }
 

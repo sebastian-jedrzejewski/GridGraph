@@ -96,7 +96,7 @@ graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_
 
 
 // MAIN WRITE MODE FUNCTION
-void write(FILE* file, int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max) 
+int write(FILE* file, int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max) 
 {
     // Generate graph
     graph graph = gen_graph(width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);
@@ -114,6 +114,9 @@ void write(FILE* file, int width, int height, float edge_weight_min, float edge_
         }
         fprintf(file, "\n");
     }
+
+    // Free up memory allocated for the graph
+    graph_free(graph);
+
+    return EXIT_SUCCESS;
 }
-
-

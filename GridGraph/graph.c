@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "graph.h"
@@ -78,21 +79,17 @@ int edge_list_length(edge_list* l)
 // FREE UP MEMORY ALLOCATED FOR THE GRAPH
 void graph_free(graph g)
 {
-    int i;
-    edge_list *tmp1 = malloc(sizeof *tmp1);
-    edge_list *tmp2 = malloc(sizeof *tmp2);
-    for(i = 0; i < g->height * g->width; i++)
+    for (int i = 0; i < g->height * g->width; i++)
     {
-        tmp1 = g->list[i];
-        while(tmp1 != NULL)
+        edge_list* head = g->list[i];
+        edge_list* tmp;
+        while (head != NULL)
         {
-            tmp2 = tmp1;
-            tmp1 = tmp1->next;
-            free(tmp2);
+            tmp = head;
+            head = head->next;
+            free(tmp);
         }
-        free(g->list[i]);
+        free(head);
     }
-    free(tmp1);
-    free(tmp2);
     free(g);
 }

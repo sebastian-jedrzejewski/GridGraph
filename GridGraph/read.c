@@ -8,15 +8,11 @@
 #define MAX_VERTICES_IN_LINE 128
 
 // Manages the read mode
-int read(char *file, int connectivity, int vertex_a, int vertex_b)
-{
-    FILE *f = fopen(file, "r");
-    if(f == NULL)
-        return 1;
-    
-    graph g = read_graph(f);
+int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
+{   
+    graph g = read_graph(file);
     if(g == NULL)
-        return 2;
+        return 1;
 }
 
 // Reads a graph from a file and saves it to the structure

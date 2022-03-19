@@ -24,6 +24,12 @@
 
 #define READ_LONG "--read"
 #define READ_SHORT "-r"
+#define R_CONNECTIVITY_LONG "--check_connectivity"
+#define R_CONNECTIVITY_SHORT "-c"
+#define R_SHORTEST_PATH_A_LONG "--shortest_path_a"
+#define R_SHORTEST_PATH_A_SHORT "-sA"
+#define R_SHORTEST_PATH_B_LONG "--shortest_path_b"
+#define R_SHORTEST_PATH_B_SHORT "-sB"
 
 #define FILE_LONG "--file"
 #define FILE_SHORT "-f"
@@ -160,11 +166,46 @@ int start_write(int argc, char* argv[])
 
 
 // READ MODE INIT
-int start_read(int argc)
+int start_read(int argc, char* argv)
 {
     int connectivity = 0;
-    int vertex_a = 0;
-    int vertex_b = 0;
+    int vertex_a = -1;
+    int vertex_b = -1;
+
+    // Connectivity
+    int connectivity_index = get_arg_index(argc, argv, R_CONNECTIVITY_LONG, R_CONNECTIVITY_SHORT);
+    if (connectivity_index > 0)
+    {
+        connectivity = 1;
+    }
+
+    // Get vertex_a
+    int vertex_a_index = get_arg_index(argc, argv, R_SHORTEST_PATH_A_LONG, R_SHORTEST_PATH_A_SHORT);
+    if (vertex_a_index > 0 && argc > vertex_a_index)
+    {
+        vertex_a = atoi(argv[vertex_a_index + 1]);
+    }
+
+    // Get vertex_b
+    int vertex_b_index = get_arg_index(argc, argv, R_SHORTEST_PATH_B_LONG, R_SHORTEST_PATH_B_SHORT);
+    if (vertex_b_index > 0 && argc > vertex_b_index)
+    {
+        vertex_b = atoi(argv[vertex_b_index + 1]);
+    }
+
+    // Get file
+    FILE* file = NULL;
+    int file_index = get_arg_index(argc, argv, FILE_LONG, FILE_SHORT);
+    if (file_index > 0 && argc > file_index)
+    {
+        file = fopen(argv[file_index + 1], "r");
+    }
+    if (file == NULL)
+    {
+        file = stdin;
+    }
+
+    return read(file, connectivity, vertex_a, vertex_b);
 }
 
 

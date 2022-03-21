@@ -166,7 +166,7 @@ int start_write(int argc, char* argv[])
 
 
 // READ MODE INIT
-int start_read(int argc, char* argv)
+int start_read(int argc, char* argv[])
 {
     int connectivity = 0;
     int vertex_a = -1;

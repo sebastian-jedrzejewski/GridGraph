@@ -1,3 +1,5 @@
-*.o
-*.out
-*.exe
+GridGraph/*
+
+!GridGraph/*.c
+!GridGraph/*.h
+!GridGraph/makefile

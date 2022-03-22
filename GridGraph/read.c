@@ -19,32 +19,25 @@ graph read_graph(FILE *f)
     graph g = graph_init(c, r);
 
     char buf[MAX_LINE_LEN];
-    int *vertices = malloc(MAX_VERTICES_IN_LINE * sizeof *vertices);
-    double *weights = malloc(MAX_VERTICES_IN_LINE * sizeof *weights);
-    int index = 0;
-    int count = 0;
+    int vertex;
+    double weight;
+    int count = -1;
     int offset;
     char *new_edge;
 
     while(fgets(buf, MAX_LINE_LEN, f) != NULL)
     {
-        new_edge = buf;
-        index = 0;
-        while(sscanf(new_edge, "%d :%lf%n", vertices + index, weights + index, &offset) == 2) {
-            index++;
-            new_edge += offset;
-        }
-        
-        for(i = 0; i < index; i++) {
-            if(count > r * c)
+        if(count >= r * c)
                 return NULL;
-            g->list[count] = edge_list_add(g->list[count], vertices[i], weights[i]);
+
+        new_edge = buf;
+        while(sscanf(new_edge, "%d :%lf%n", &vertex, &weight, &offset) == 2) {
+            g->list[count] = edge_list_add(g->list[count], vertex, weight);
+            new_edge += offset;
         }
         
         count++;
     }
-    free(vertices);
-    free(weights);
     return g;
 }
 

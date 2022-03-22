@@ -36,7 +36,7 @@ graph read_graph(FILE *f)
         }
         
         for(i = 0; i < index; i++) {
-            if(count >= r * c)
+            if(count > r * c)
                 return NULL;
             g->list[count] = edge_list_add(g->list[count], vertices[i], weights[i]);
         }

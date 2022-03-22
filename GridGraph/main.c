@@ -7,6 +7,7 @@
 #include "read.h"
 #include "write.h"
 
+
 #define WRITE_LONG "--write"
 #define WRITE_SHORT "-w"
 #define W_WIDTH_LONG "--width"

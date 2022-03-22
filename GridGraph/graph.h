@@ -4,7 +4,7 @@
 // STRUCTS DECLARATIONS
 typedef struct e {
 	int vertex;
-	float weight;
+	double weight;
 	struct e *next;
 } edge_list;
 typedef struct g {
@@ -15,7 +15,7 @@ typedef struct g {
 
 // FUNCTIONS DECLARATIONS
 graph graph_init(int w, int h);
-edge_list* edge_list_add(edge_list *l, int v, float wt);
+edge_list* edge_list_add(edge_list *l, int v, double wt);
 int edge_list_contains_vertex(edge_list* l, int v);
 int edge_list_length(edge_list* l);
 void graph_free(graph g);

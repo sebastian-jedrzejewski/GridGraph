@@ -13,7 +13,7 @@ const int ec_drawing_weight[5] = {1, 2, 4, 8, 16};
 
 
 // GENERATE GRAPH
-graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max)
+graph gen_graph(int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max)
 {
     srand(time(0));
 
@@ -83,7 +83,7 @@ graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_
             int_array_remove_at(available_vertices, available_vertices_count, index);
             available_vertices_count--;
 
-            float weight = rand() / (RAND_MAX / (edge_weight_max - edge_weight_min));
+            double weight = rand() / (RAND_MAX / (edge_weight_max - edge_weight_min));
 
             graph->list[i] = edge_list_add(graph->list[i], vertex, weight);
             graph->list[vertex] = edge_list_add(graph->list[vertex], i, weight);
@@ -96,7 +96,7 @@ graph gen_graph(int width, int height, float edge_weight_min, float edge_weight_
 
 
 // MAIN WRITE MODE FUNCTION
-int write(FILE* file, int width, int height, float edge_weight_min, float edge_weight_max, int edge_count_min, int edge_count_max) 
+int write(FILE* file, int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max) 
 {
     // Generate graph
     graph graph = gen_graph(width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);

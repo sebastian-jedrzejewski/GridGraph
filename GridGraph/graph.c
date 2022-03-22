@@ -20,7 +20,7 @@ graph graph_init(int w, int h)
 }
 
 // ADD NEW EDGE TO SPECIFIED EDGE_LIST (VERTEX)
-edge_list* edge_list_add(edge_list *l, int v, float wt)
+edge_list* edge_list_add(edge_list *l, int v, double wt)
 {
     edge_list *ne = malloc(sizeof *ne);
     ne->vertex = v;

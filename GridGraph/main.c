@@ -56,8 +56,8 @@ int start_write(int argc, char* argv[])
 {
     int width = 0; // Must be >0
     int height = 0; // Must be >0
-    float edge_weight_min = 0; // Must be >=0 && <=edge_weight_max
-    float edge_weight_max = 1; // Must be >=edge_weight_min
+    double edge_weight_min = 0; // Must be >=0 && <=edge_weight_max
+    double edge_weight_max = 1; // Must be >=edge_weight_min
     int edge_count_min = 0; // Must be >=0 && <=edge_count_max
     int edge_count_max = 4; // Must be >=edge_count_min && <=4
 

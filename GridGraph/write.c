@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "graph.h"
-#include "helpers.h"
 #include "write.h"
 
 
@@ -80,7 +80,8 @@ graph gen_graph(int width, int height, double edge_weight_min, double edge_weigh
         {
             int index = rand() % available_vertices_count;
             int vertex = available_vertices[index];
-            int_array_remove_at(available_vertices, available_vertices_count, index);
+            
+            memmove(available_vertices + index, available_vertices + index + 1, sizeof(int) * (available_vertices_count - (index + 1)));
             available_vertices_count--;
 
             double weight = rand() / (RAND_MAX / (edge_weight_max - edge_weight_min));

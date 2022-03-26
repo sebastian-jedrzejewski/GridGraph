@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "graph.h"
-#include "helpers.h"
 #include "read.h"
 #include "write.h"
 

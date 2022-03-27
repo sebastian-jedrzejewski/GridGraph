@@ -7,33 +7,21 @@
 #include "queue.h"
 
 
-// COLOR
-typedef enum c 
-{
-    white = 0,
-    grey = 1,
-    black = 2,
-} color;
-
-
 // MAIN BFS ALGORITHM
-void bfs(graph graph, int vertex)
+int* bfs(graph graph, int vertex)
 {
     // Init for all vertices
     int number_of_vertices = graph->height * graph->width;
-    color* colors = malloc(sizeof(color) * number_of_vertices);
+    int* visited = malloc(sizeof(int) * number_of_vertices);
     int* parents = malloc(sizeof(int) * number_of_vertices);
-    int* lengths = malloc(sizeof(int) * number_of_vertices);
     for (int i = 0; i < number_of_vertices; i++)
     {
-        colors[i] = white;
-        lengths[i] = INT_MAX;
+        visited[i] = 0;
         parents[i] = 0;
     }
 
     // Init for start vertex
-    colors[vertex] = grey;
-    lengths[vertex] = 0;
+    visited[vertex] = 1;
 
     // Init queue
     queue* queue = NULL;
@@ -47,15 +35,18 @@ void bfs(graph graph, int vertex)
         while (current_vertex_edges != NULL)
         {
             int v = current_vertex_edges->vertex;
-            if (colors[v] == white)
+            if (!visited[v])
             {
-                colors[v] = grey;
-                lengths[v] = lengths[current_vertex] + 1;
+                visited[v] = 1;
                 parents[v] = current_vertex;
                 queue_enqueue(&queue, v);
             }
             current_vertex_edges = current_vertex_edges->next;
         }
-        colors[current_vertex] = black;
+        visited[current_vertex] = 1;
     }
+
+    free(parents);
+
+    return visited;
 }

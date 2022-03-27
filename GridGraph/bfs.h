@@ -4,6 +4,6 @@
 #include "graph.h"
 
 // FUNCTIONS DECLARATIONS
-void bfs(graph graph, int vertex);
+int* bfs(graph graph, int vertex);
 
 #endif

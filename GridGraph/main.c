@@ -3,236 +3,331 @@
 #include <string.h>
 
 #include "graph.h"
+#include "helpers.h"
 #include "read.h"
 #include "write.h"
 
 
-#define WRITE_LONG "--write"
-#define WRITE_SHORT "-w"
-#define W_WIDTH_LONG "--width"
-#define W_WIDTH_SHORT "-xw"
-#define W_HEIGHT_LONG "--height"
-#define W_HEIGHT_SHORT "-xh"
-#define W_EDGE_WEIGHT_MIN_LONG "--edge_weight_min"
-#define W_EDGE_WEIGHT_MIN_SHORT "-Wmin"
-#define W_EDGE_WEIGHT_MAX_LONG "--edge_weight_max"
-#define W_EDGE_WEIGHT_MAX_SHORT "-Wmax"
-#define W_EDGE_COUNT_MIN_LONG "--edge_count_min"
-#define W_EDGE_COUNT_MIN_SHORT "-Cmin"
-#define W_EDGE_COUNT_MAX_LONG "--edge_count_max"
-#define W_EDGE_COUNT_MAX_SHORT "-Cmax"
+// OPTIONS { long (--), short (-) }
+const char* write_o[2] = { "--write", "-w" };
+const char* w_width_o[2] = { "--width", "-xw" };
+const char* w_height_o[2] = { "--height", "-xh" };
+const char* w_edge_weight_min_o[2] = { "--edge_weight_min", "-Wmin" };
+const char* w_edge_weight_max_o[2] = { "--edge_weight_max", "-Wmax" };
+const char* w_edge_count_min_o[2] = { "--edge_count_min", "-Cmin" };
+const char* w_edge_count_max_o[2] = { "--edge_count_max", "-Cmax" };
 
-#define READ_LONG "--read"
-#define READ_SHORT "-r"
-#define R_CONNECTIVITY_LONG "--check_connectivity"
-#define R_CONNECTIVITY_SHORT "-c"
-#define R_SHORTEST_PATH_A_LONG "--shortest_path_a"
-#define R_SHORTEST_PATH_A_SHORT "-sA"
-#define R_SHORTEST_PATH_B_LONG "--shortest_path_b"
-#define R_SHORTEST_PATH_B_SHORT "-sB"
+const char* read_o[2] = { "--read", "-r" };
+const char* r_connectivity_o[2] = { "--connectivity", "-c" };
+const char* r_shortest_path_a_o[2] = { "--shortest_path_a", "-sA" };
+const char* r_shortest_path_b_o[2] = { "--shortest_path_b", "-sB" };
 
-#define FILE_LONG "--file"
-#define FILE_SHORT "-f"
+const char* file_o[2] = { "--file", "-f" };
 
-
-
-// GET ARGUMENT INDEX
-int get_arg_index(int argc, char* argv[], char* long_name, char* short_name)
-{
-    for (int i = 1; i < argc; i++)
-    {
-        if (strcmp(argv[i], long_name) == 0 || strcmp(argv[i], short_name) == 0)
-        {
-            return i;
-        }
-    }
-    return 0;
-}
+// HELP
+const char* help =
+"usage: gridgraph [mode] [mode options] [file]\n"
+"\n"
+"Mode switches:\n"
+"--write/-w                 write mode (generates graph with specified parameters and saves it to file/writes it to stdout)\n"
+"--read/-r                  read mode (reads graph from file/stdin and checks specified parameters)\n"
+"\n"
+"Write mode options (* = optional):\n"
+"--width/-xw                graph width (number of colums)\n"
+"--height/-xh               graph height (number of rows)\n"
+"--edge_weight_min/-Wmin    *edge weight randomizer lower bound [must be >=0; default: 0]\n"
+"--edge_weight_max/-Wmax    *edge weight randomizer upper bound [must be <=1 & >=edge_weight_min; default: 1]\n"
+"--edge_count_min/-Cmin     *edge count randomizer lower bound (not guaranteed) [must be >=0 & <=edge_count_max; default: 0]\n"
+"--edge_count_max/-Cmax     *edge count randomizer upper bound [must be <=4 & >=edge_count_min; default: 4]\n"
+"\n"
+"Read mode options (at least one required; ~ = switch):\n"
+"--connectivity/-c          ~check connectivity\n"
+"--shortest_path_a/-sA      find shortest path from specified point to the remaining vertices\n"
+"--shortest_path_b/-sB      [requires shortest_path_a] find shortest path from point a (specified in shortest_path_a) to point b (specified here)\n"
+"\n"
+"File option:\n"
+"--file/-f                  path to file where the graph has to be written/read from (if not specified program will use stdout/stdin)\n";
 
 
 // WRITE MODE INIT
-int start_write(int argc, char* argv[])
+int write_init(int argc, char* argv[])
 {
-    int width = 0; // Must be >0
-    int height = 0; // Must be >0
-    double edge_weight_min = 0; // Must be >=0 && <=edge_weight_max
-    double edge_weight_max = 1; // Must be >=edge_weight_min
-    int edge_count_min = 0; // Must be >=0 && <=edge_count_max
-    int edge_count_max = 4; // Must be >=edge_count_min && <=4
+    int width = -1; // Must be specified (>0)
+    int height = -1; // Must be specified (>0)
+    double edge_weight_min = 0;
+    double edge_weight_max = 1;
+    int edge_count_min = 0;
+    int edge_count_max = 4;
+    FILE* file = NULL;
 
-    // Get width
-    int width_index = get_arg_index(argc, argv, W_WIDTH_LONG, W_WIDTH_SHORT);
-    if (width_index > 0 && argc > width_index)
+    // Get values
+    for (int i = 1; i < argc; i++)
     {
-        width = atoi(argv[width_index + 1]);
-    }
-    else
-    {
-        fprintf(stderr, "ERROR (Write mode): Width argument not found");
-        return EXIT_FAILURE;
+        // width
+        if (str_arr_get_index(argv[i], w_width_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                width = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): width must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // height
+        else if (i < argc && str_arr_get_index(argv[i], w_height_o, 2) >= 0)
+        {
+            i++;
+            if (str_is_int(argv[i])) 
+            {
+                height = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): height must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // edge_weight_min
+        else if (str_arr_get_index(argv[i], w_edge_weight_min_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_float(argv[i])) 
+            {
+                edge_weight_min = atof(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): edge_weight_min must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // edge_weight_max
+        else if (str_arr_get_index(argv[i], w_edge_weight_max_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_float(argv[i])) 
+            {
+                edge_weight_max = atof(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): edge_weight_max must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // edge_count_min
+        else if (str_arr_get_index(argv[i], w_edge_count_min_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                edge_count_min = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): edge_count_min must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // edge_count_min
+        else if (str_arr_get_index(argv[i], w_edge_count_max_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                edge_count_max = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): edge_count_max must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // file
+        else if (str_arr_get_index(argv[i], file_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc)
+            {
+                file = fopen(argv[i], "w");
+            }
+        }
     }
 
-    // Get height
-    int height_index = get_arg_index(argc, argv, W_HEIGHT_LONG, W_HEIGHT_SHORT);
-    if (height_index > 0 && argc > height_index)
-    {
-        height = atoi(argv[height_index + 1]);
-    }
-    else
-    {
-        fprintf(stderr, "ERROR (Write mode): Height argument not found");
-        return EXIT_FAILURE;
-    }
-
-    // Get edge_weight_min
-    int edge_weight_min_index = get_arg_index(argc, argv, W_EDGE_WEIGHT_MIN_LONG, W_EDGE_WEIGHT_MIN_SHORT);
-    if (edge_weight_min_index > 0 && argc > edge_weight_min_index)
-    {
-        edge_weight_min = atof(argv[edge_weight_min_index + 1]);
-    }
-
-    // Get edge_weight_max
-    int edge_weight_max_index = get_arg_index(argc, argv, W_EDGE_WEIGHT_MAX_LONG, W_EDGE_WEIGHT_MAX_SHORT);
-    if (edge_weight_max_index > 0 && argc > edge_weight_max_index)
-    {
-        edge_weight_max = atof(argv[edge_weight_max_index + 1]);
-    }
-
-    // Get edge_count_min
-    int edge_count_min_index = get_arg_index(argc, argv, W_EDGE_COUNT_MIN_LONG, W_EDGE_COUNT_MIN_SHORT);
-    if (edge_count_min_index > 0 && argc > edge_count_min_index)
-    {
-        edge_count_min = atoi(argv[edge_count_min_index + 1]);
-    }
-
-    // Get edge_count_max
-    int edge_count_max_index = get_arg_index(argc, argv, W_EDGE_COUNT_MAX_LONG, W_EDGE_COUNT_MAX_SHORT);
-    if (edge_count_max_index > 0 && argc > edge_count_max_index)
-    {
-        edge_count_max = atoi(argv[edge_count_max_index + 1]);
-    }
-
-    // Check arguments
+    // Check values
     if (width <= 0)
     {
-        fprintf(stderr, "ERROR (Write mode): Width must be greater than 0.");
+        fprintf(stderr, "ERROR (Write mode): width must be greater than 0 (%d was given)\n", width);
         return EXIT_FAILURE;
     }
     if (height <= 0)
     {
-        fprintf(stderr, "ERROR (Write mode): Height must be greater than 0.");
+        fprintf(stderr, "ERROR (Write mode): height must be greater than 0 (%d wag given)\n", height);
         return EXIT_FAILURE;
     }
     if (edge_weight_min < 0)
     {
-        fprintf(stderr, "ERROR (Write mode): Minimum weight of edges must be greater than or equal to 0.");
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be greater or equal to 0 (%f was given)\n", edge_weight_min);
         return EXIT_FAILURE;
     }
-    if (edge_weight_max < edge_weight_min)
+    if (edge_weight_max > 1)
     {
-        fprintf(stderr, "ERROR (Write mode): Maximum weight of edges must be greater than or equal to minimum weight of edges.");
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be lower or equal to 1 (%f was given)\n", edge_weight_max);
+        return EXIT_FAILURE;
+    }
+    if (edge_weight_min > edge_weight_max)
+    {
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min (%f was given) must be lower or equal to edge_weight_max (%f was given)\n", edge_weight_min, edge_weight_max);
         return EXIT_FAILURE;
     }
     if (edge_count_min < 0)
     {
-        fprintf(stderr, "ERROR (Write mode): Minimum number of edges must be greater than or equal to 0.");
+        fprintf(stderr, "ERROR (Write mode): edge_count_min must be greater or equal to 0 (%d was given)\n", edge_count_min);
         return EXIT_FAILURE;
     }
     if (edge_count_max > 4)
     {
-        fprintf(stderr, "ERROR (Write mode): Maximum number of edges must be less than or equal to 4.");
+        fprintf(stderr, "ERROR (Write mode): edge_count_max must be lower or equal to 4 (%d was given)\n", edge_count_max);
         return EXIT_FAILURE;
     }
-    if (edge_count_max < edge_count_min)
+    if (edge_count_min > edge_count_max)
     {
-        fprintf(stderr, "ERROR (Write mode): Maximum number of edges must be greater than or equal to minimum number of edges.");
+        fprintf(stderr, "ERROR (Write mode): edge_count_min (%d was given) must be lower or equal to edge_count_max (%d was given)\n", edge_count_min, edge_count_max);
         return EXIT_FAILURE;
-    }
-
-    // Get file
-    FILE* file = NULL;
-    int file_index = get_arg_index(argc, argv, FILE_LONG, FILE_SHORT);
-    if (file_index > 0 && argc > file_index)
-    {
-        file = fopen(argv[file_index + 1], "w");
     }
     if (file == NULL)
     {
         file = stdout;
     }
-
     return write(file, width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);
 }
 
-
 // READ MODE INIT
-int start_read(int argc, char* argv[])
+int read_init(int argc, char* argv[])
 {
     int connectivity = 0;
-    int vertex_a = -1;
-    int vertex_b = -1;
-
-    // Connectivity
-    int connectivity_index = get_arg_index(argc, argv, R_CONNECTIVITY_LONG, R_CONNECTIVITY_SHORT);
-    if (connectivity_index > 0)
-    {
-        connectivity = 1;
-    }
-
-    // Get vertex_a
-    int vertex_a_index = get_arg_index(argc, argv, R_SHORTEST_PATH_A_LONG, R_SHORTEST_PATH_A_SHORT);
-    if (vertex_a_index > 0 && argc > vertex_a_index)
-    {
-        vertex_a = atoi(argv[vertex_a_index + 1]);
-    }
-
-    // Get vertex_b
-    int vertex_b_index = get_arg_index(argc, argv, R_SHORTEST_PATH_B_LONG, R_SHORTEST_PATH_B_SHORT);
-    if (vertex_b_index > 0 && argc > vertex_b_index)
-    {
-        vertex_b = atoi(argv[vertex_b_index + 1]);
-    }
-
-    // Get file
+    int shortest_path_a = -1;
+    int shortest_path_b = -1;
     FILE* file = NULL;
-    int file_index = get_arg_index(argc, argv, FILE_LONG, FILE_SHORT);
-    if (file_index > 0 && argc > file_index)
+
+    // Get values
+    for (int i = 1; i < argc; i++)
     {
-        file = fopen(argv[file_index + 1], "r");
+        // connectivity
+        if (str_arr_get_index(argv[i], r_connectivity_o, 2) >= 0)
+        {
+            connectivity = 1;
+        }
+
+        // shortest_path_a
+        if (str_arr_get_index(argv[i], r_shortest_path_a_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                shortest_path_a = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Read mode): shortest_path_a must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // shortest_path_b
+        if (str_arr_get_index(argv[i], r_shortest_path_b_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                shortest_path_b = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Read mode): shortest_path_b must be a positive number\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // file
+        else if (str_arr_get_index(argv[i], file_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc)
+            {
+                file = fopen(argv[i], "r");
+            }
+        }
+    }
+
+    // Check values
+    int at_least_one_option_chosen = 0;
+    if (connectivity)
+    {
+        at_least_one_option_chosen = 1;
+    }
+    if (shortest_path_a >= 0)
+    {
+        at_least_one_option_chosen = 1;
+    }
+    if (shortest_path_b >= 0)
+    {
+        if (shortest_path_a < 0)
+        {
+            fprintf(stderr, "ERROR (Read mode): shortest_path_a argument is required when shortest_path_b is specified\n");
+            return EXIT_FAILURE;
+        }
+        else if (shortest_path_b == shortest_path_a)
+        {
+            fprintf(stderr, "ERROR (Read mode): shortest_path_b (%d was given) cannot be equal to shortest_path_a (%d was given)\n", shortest_path_b, shortest_path_a);
+            return EXIT_FAILURE;
+        }
+    }
+    if (!at_least_one_option_chosen)
+    {
+        fprintf(stderr, "ERROR (Read mode): At least one of checking options has to be chosen\n");
+        return EXIT_FAILURE;
     }
     if (file == NULL)
     {
         file = stdin;
     }
 
-    return read(file, connectivity, vertex_a, vertex_b);
+    return read(file, connectivity, shortest_path_a, shortest_path_b);
 }
-
 
 // ENTRY POINT
 int main(int argc, char* argv[]) 
 {
     if (argc > 1)
     {
-        int write_mode = get_arg_index(argc, argv, WRITE_LONG, WRITE_SHORT);
-        int read_mode = get_arg_index(argc, argv, READ_LONG, READ_SHORT);
-        if (write_mode > 0 && read_mode == 0)
+        for (int i = 1; i < argc; i++)
         {
-            return start_write(argc, argv);
+            if (str_arr_get_index(argv[i], write_o, 2) >= 0)
+            {
+                return write_init(argc, argv);
+            }
+            else if (str_arr_get_index(argv[i], read_o, 2) >= 0)
+            {
+                return read_init(argc, argv);
+            }
         }
-        else if (read_mode > 0 && write_mode == 0)
-        {
-            return start_read(argc, argv);
-        }
-        else
-        {
-            fprintf(stderr, "ERROR: Invalid combination of modes.");
-            return EXIT_FAILURE;
-        }
+        fprintf(stderr, "ERROR: Mode not specified\n");
+        return EXIT_FAILURE;
     }
     else
     {
-        fprintf(stderr, "ERROR: Invalid number of arguments.");
+        fprintf(stdout, "%s", help);
         return EXIT_FAILURE;
     }
 }

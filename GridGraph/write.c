@@ -95,7 +95,6 @@ graph gen_graph(int width, int height, double edge_weight_min, double edge_weigh
     return graph;
 }
 
-
 // MAIN WRITE MODE FUNCTION
 int write(FILE* file, int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max) 
 {

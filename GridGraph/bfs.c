@@ -13,11 +13,9 @@ int* bfs(graph graph, int vertex)
     // Init for all vertices
     int number_of_vertices = graph->height * graph->width;
     int* visited = malloc(sizeof(int) * number_of_vertices);
-    int* parents = malloc(sizeof(int) * number_of_vertices);
     for (int i = 0; i < number_of_vertices; i++)
     {
         visited[i] = 0;
-        parents[i] = 0;
     }
 
     // Init for start vertex
@@ -38,15 +36,12 @@ int* bfs(graph graph, int vertex)
             if (!visited[v])
             {
                 visited[v] = 1;
-                parents[v] = current_vertex;
                 queue_enqueue(&queue, v);
             }
             current_vertex_edges = current_vertex_edges->next;
         }
         visited[current_vertex] = 1;
     }
-
-    free(parents);
 
     return visited;
 }

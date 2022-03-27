@@ -2,12 +2,14 @@
 #define GRAPH_H
 
 // STRUCTS DECLARATIONS
-typedef struct e {
+typedef struct e
+{
 	int vertex;
 	double weight;
 	struct e *next;
 } edge_list;
-typedef struct g {
+typedef struct g 
+{
 	int width;
 	int height;
 	edge_list **list;

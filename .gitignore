@@ -3,3 +3,9 @@ GridGraph/*
 !GridGraph/*.c
 !GridGraph/*.h
 !GridGraph/makefile
+
+
+
+Documentation/*
+
+!Documentation/*.tex

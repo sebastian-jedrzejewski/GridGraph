@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+
+
+\title{\Huge GridGraph - Specyfikacja}
+\author{Skoczek Mateusz, Jędrzejewski Sebastian}
+\date{\today}
+
+
+
+\begin{document}
+
+    \maketitle
+    
+
+    \begin{abstract}
+        Dokument zawiera specyfikację funkcjonalną oraz implementacyjną dotyczącą projektu \textsl{GridGraph}
+    \end{abstract}
+
+
+    \tableofcontents
+    \thispagestyle{empty}
+
+
+
+    \newpage
+    \chapter{Specyfikacja funkcjonalna}
+
+    \newpage
+    \section{Cel projektu}
+    Program \verb|GridGraph| ma na celu wygenerowanie oraz zapis do pliku (lub na standardowe wyjście) grafu siatkowego o podanych paramentrach lub wczytanie grafu z pliku (lub ze standardowego wejścia) i sprawdzenie wybranych jego parametrów. Program działa w trybie wsadowym. Grafy są przedstawiane w plikach w postaci listy sąsiedztwa.
+
+    \newpage
+    \section{Opis funkcji}
+    Program może działać w dwóch trybach: zapisu (\verb|write|) i czytania (\verb|read|).\\
+    \\
+    \\
+    W trybie zapisu program generuje graf o określonej przez użytkownika szerokości (ilości kolumn) (\verb|width|), wysokości (ilości wierszy) (\verb|height|), minimalnej (\verb|edge_weight_min|) i maksymalnej (\verb|edge_weight_max|) wagi krawędzi oraz minimalnej (\verb|edge_count_min|) i maksymalnej (\verb|edge_count_max|) ilości krawędzi wychodzących z jednego wierzchołka, a następnie zapisuje go w formie listy sąsiedztwa do pliku określonego przez użytkownika (lub wypisuje na standardowe wyjście).\\
+    \\
+    Jeżeli graf zostanie pomyślnie zapisany do pliku (lub wypisany na standardowe wyjście), program zwróci \verb|0|. W przeciwnym wypadku zostanie wyświetlony komunikat błędu, a program zwróci \verb|1|.\\
+    \\
+    \\
+    W trybie czytania program wczytuje graf zapisany (w formie listy sąsiedztwa) w określonym przez użytkownika pliku (lub czyta ze standardowego wejścia), a następnie sprawdza określone przez użytkownika właściwości grafu:
+    \begin{itemize}
+        \item Spójność grafu (\verb|connectivity|)
+        \item Najkrótsza ścieżka z węzła A do innych węzłów (\verb|shortest_path_a|) lub do określonego węzła B (\verb|shortest_path_a| oraz \verb|shortest_path_b|)
+    \end{itemize}
+    Jeżeli graf został wczytany oraz sprawdzony pomyślnie, zostanie wyświetlony wynik sprawdzania…\\
+    \\
+    Przykład (graf spójny, ścieżka istnieje):\\
+    \verb|Connectivity: connected|\\
+    \verb|Shortest path from 0 to 10 (weight): 0-3-4-6-9-10 (0.778)|\\
+    \\
+    Przykład (graf niespójny, ścieżka nie istnieje):\\
+    \verb|Connectivity: disconnected|\\
+    \verb|Shortest path from 0 to 10 (weight): path does not exist|\\
+    \\
+    …a następnie program zwróci \verb|0|. W przeciwnym wypadku zostanie wyświetlony komunikat błędu, a program zwróci \verb|1|
+
+    \newpage
+    \section{Opis wywołania}
+    \subsection{Tryb zapisu}
+    
+\end{document}

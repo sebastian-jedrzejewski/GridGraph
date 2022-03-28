@@ -14,6 +14,9 @@ int path_fill(d_result result, int *nv, int from, int to)
     int i;
     for(i = to; i > -1; i = result->p[i])
         nv[l++] = i;
+    
+    if(nv[l-1] != from)
+        return -1;
     return l;
 }
 
@@ -79,8 +82,13 @@ int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
         {
             printf("Shortest path from %d to %d and its weight: ", vertex_a, vertex_b);
             l = path_fill(result, nv, vertex_a, vertex_b);
-            path_display(result, nv, l);
-            printf("(%g)\n", result->d[vertex_b]);
+            if(l > 0)
+            {
+                path_display(result, nv, l);
+                printf("(%g)\n", result->d[vertex_b]);
+            }
+            else
+                printf("Path does not exist\n");
         }
         else
         {
@@ -89,8 +97,13 @@ int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
             {
                 l = path_fill(result, nv, vertex_a, i);
                 printf("Path to %d (weight): ", i);
-                path_display(result, nv, l);
-                printf("(%g)\n", result->d[i]);
+                if(l > 0)
+                {
+                    path_display(result, nv, l);
+                    printf("(%g)\n", result->d[i]);
+                }
+                else
+                    printf("Path does not exist\n");
             }
         }
 

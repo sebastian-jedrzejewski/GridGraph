@@ -2,7 +2,7 @@
 #define _READ_H_
 
 #include <stdio.h>
-#include "Dijkstra.h"
+#include "dijkstra.h"
 
 // FUNCTIONS DECLARATIONS
 int read(FILE *file, int connectivity, int vertex_a, int vertex_b);

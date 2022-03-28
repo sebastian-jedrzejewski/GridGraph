@@ -132,9 +132,91 @@
     \\
     \\
     Powyższy przykład ilustruje wywołanie programu, który generuje graf o 6 kolumnach i 6 wierszach, z wagami krawędzi mieszczącymi się w przedziale od 0.2 do 0.65, gdzie minimalna ilość krawędzi wychodzących z wierzchołka to 0, a maksymalna ilość krawędzi to 3. Program zapisuje graf w odpowiednim formacie do pliku o nazwie \verb|graph| znajdującego się w \verb|/home/user|.
+    \subsection{Tryb czytania}
+    Wywołanie:\\
+    \\
+    \verb|./gridgraph --read/-r [argumenty]|\\
+    \\
+    Argumenty:
+    \begin{itemize}
+        \begin{samepage}
+            \item \verb|--connectivity/-c| (Sprawdza czy graf jest spójny, używając algorytmu BFS)
+            \begin{description}
+                \item[Typ:] -
+                \item[Zakres:] -
+                \item[Wymagany:] NIE\footnote{\label{args_note1}Wymagany przynajmniej jeden}
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--shortest_path_a/-Sa| (Znajduje najkrótszą ścieżkę od wierzchołka A do pozostałych wierzchołków, używając algorytmu Dijkstry)
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $<$0, ilość wierzchołków grafu$>$
+                \item[Wymagany:] NIE\footnotemark[\ref{args_note1}] \footnote{Wymagane jeżeli shortest\_path\_b zostało zdefiniowane}
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--shortest_path_b/-Sb| (Znajduje najkrótszą ścieżkę od wierzchołka A do wierzchołka B, używając algorytmu Dijkstry)
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $<$0, ilość wierzchołków grafu$>$ / \verb|shortest_path_a|
+                \item[Wymagany:] NIE\footnotemark[\ref{args_note1}]
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--file/-f| (Plik z którego ma zostać wczytany graf)
+            \begin{description}
+                \item[Typ:] Ścieżka do pliku
+                \item[Zakres:] -
+                \item[Wymagany:] NIE (domyślnie: standardowe wejście)
+            \end{description}
+        \end{samepage}
+    \end{itemize}
+    Przykład:\\
+    \verb|./gridgraph -r -c -Sa 0 -Sb 10 -f “home/user/graph”|\\
+    \\
+    \\
+    Powyższy przykład ilustruje wywołanie programu, który czyta plik ze strukturą grafu o nazwie \verb|graph| znajdujący się w \verb|/home/user|, a następnie sprawdza czy ten graf jest spójny oraz wyznacza najkrótszą ścieżkę pomiędzy węzłami numer 0 i 10.
+
+    \newpage
+    \section{Format danych wejściowych i wyjściowych}
+    Dane wejściowe i wyjściowe przechowują graf w postaci listy sąsiedztwa. W pierwszej linijce znajdują się dwie liczby, które oznaczają odpowiednio liczbę kolumn i wierszy danego grafu. Każda następna linijka reprezentuje jeden wierzchołek, przy czym wierzchołki numerujemy od 0 od lewej do prawej. Zatem druga linijka w pliku zawiera numery wierzchołków, z którymi połączony jest wierzchołek numer 0, kolejna dotyczy wierzchołka numer 1 itd. Przy każdym numerze wierzchołka po dwukropku podana jest waga krawędzi pomiędzy tymi dwoma wierzchołkami.\\
+    \\
+    Przykład:\\
+    \verb|2 2|\\
+    \verb|     1 :0.54  2 :0.78 |\\
+    \verb|     0 :0.54  3 :0.12 |\\
+    \verb|     0 :0.78  3 :0.89 |\\
+    \verb|     1 :0.12  2 :0.89 |\\
+    \\
+    Powyżej przedstawiona jest przykładowa zawartość pliku przechowującego graf. W pierwszej linijce można odczytać, że jest to graf o dwóch kolumnach i dwóch wierszach. W drugiej linijce przedstawiona jest informacja o tym, że wierzchołek numer 0 połączony jest z wierzchołkiem numer 1, a krawędź ta ma wagę 0.54. Istnieje również krawędź pomiędzy wierzchołkiem 0 a 2 o wadze 0.78. W trzeciej linijce znajdują się numery wierzchołków połączonych z wierzchołkiem numer 1 wraz z wagami itd.
+
+    \newpage
+    \section{Opis błędów}
+    W przypadku błędu program wypisuje błąd na standardowy strumień błędów i zwraca 1. Komunikat błędów jest poprzecony słowem \verb|ERROR| oraz nazwą trybu w nawiasie (np. \verb|(Write mode)|), jeżeli błąd dotyczy konkretnego trybu.\\
+    Poniżej przedstawione są komunikaty generowane przez program, gdy ten wykryje błąd, wraz z ich wyjaśnieniem:\\
+    \begin{description}
+        \item[WIDTH\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|width|, ale nie została podana wartość lub wartość nie jest liczbą.
+        \item[HEIGHT\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|height|, ale nie została podana wartość lub wartość nie jest liczbą.
+        \item[EDGE\_WEIGHT\_MIN\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_weight_min|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[EDGE\_WEIGHT\_MAX\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_weight_max|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[EDGE\_COUNT\_MIN\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_count_min|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[EDGE\_COUNT\_MAX\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_count_max|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[WIDTH\_LOWER\_OR\_EQUAL\_TO\_ZERO] Wartość argumentu \verb|width| jest mniejsza lub równa 0 (musi być większa od 0).
+        \item[HEIGHT\_LOWER\_OR\_EQUAL\_TO\_ZERO] Wartość argumentu \verb|height| jest mniejsza lub równa 0 (musi być większa od 0).
+        \item[EDGE\_WEIGHT\_MIN\_LOWER\_THAN\_ZERO] Wartość argumentu \verb|edge_weight_min| jest mniejsza od 0 (musi być większa lub równa 0 i mniejsza lub równa \verb|edge_weight_max|).
+        \item[EDGE\_WEIGHT\_MAX\_GREATER\_THAN\_ONE] Wartość argumentu \verb|edge_weight_max| jest większa od 1 (musi być mniejsza lub równa 1 i większa lub równa \verb|edge_weight_min|).
+        \item[EDGE\_WEIGHT\_MIN\_GREATER\_THAN\_EDGE\_WEIGHT\_MAX] Wartość argumentu \verb|edge_weight_min| jest większa od \verb|edge_weight_max| (musi być większa lub równa 0 i mniejsza lub równa \verb|edge_weight_max|).
+        \item[EDGE\_COUNT\_MIN\_LOWER\_THAN\_ZERO] Wartość argumentu \verb|edge_count_min| jest mniejsza od 0 (musi być większa lub równa 0 i mniejsza lub równa \verb|edge_count_max|).
+        \item[EDGE\_COUNT\_MAX\_GREATER\_THAN\_FOUR] Wartość argumentu \verb|edge_count_max| jest większa od 4 (musi być mniejsza lub równa 4 i większa lub równa \verb|edge_count_min|).
+        \item[EDGE\_COUNT\_MIN\_GREATER\_THAN\_EDGE\_COUNT\_MAX] Wartość argumentu \verb|edge_count_min| jest większa od \verb|edge_count_max| (musi być większa lub równa 0 i mniejsza lub równa \verb|edge_count_max|).
+        \item[SHORTEST\_PATH\_A\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|shortest_path_a|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[SHORTEST\_PATH\_B\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|shortest_path_b|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[SHORTEST\_PATH\_B\_WITHOUT\_SHORTEST\_PATH\_A\_SPECIFIED] Został wybrany argument \verb|shortest_path_a|, ale nie został wybrany argument \verb|shortest_path_b|.
+        \item[SHORTEST\_PATH\_B\_EQUAL\_TO\_SHORTEST\_PATH\_A] Argument \verb|shortest_path_b| jest równy \verb|shortest_path_a| (wartości argumentów muszą być różne od siebie).
+        \item[CHECKING\_OPTIONS\_NOT\_SPECIFIED] Nie została wybrana przynajmniej jedna opcja sprawdzająca (przynajmniej jedna wymagana).
+    \end{description}
 
 
-
-
-    
+    \chapter{Specyfikacja implementacyjna}    
 \end{document}

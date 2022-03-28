@@ -73,7 +73,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): width must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): width must be a positive number [WIDTH_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -88,7 +88,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): height must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): height must be a positive number [HEIGHT_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -103,7 +103,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_weight_min must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): edge_weight_min must be a positive number [EDGE_WEIGHT_MIN_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -118,7 +118,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_weight_max must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): edge_weight_max must be a positive number [EDGE_WEIGHT_MAX_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -133,7 +133,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_count_min must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): edge_count_min must be a positive number [EDGE_COUNT_MIN_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -148,7 +148,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_count_max must be a positive number\n");
+                fprintf(stderr, "ERROR (Write mode): edge_count_max must be a positive number [EDGE_COUNT_MAX_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -167,42 +167,42 @@ int write_init(int argc, char* argv[])
     // Check values
     if (width <= 0)
     {
-        fprintf(stderr, "ERROR (Write mode): width must be greater than 0 (%d was given)\n", width);
+        fprintf(stderr, "ERROR (Write mode): width must be greater than 0 (%d was given) [WIDTH_LOWER_OR_EQUAL_TO_ZERO]\n", width);
         return EXIT_FAILURE;
     }
     if (height <= 0)
     {
-        fprintf(stderr, "ERROR (Write mode): height must be greater than 0 (%d wag given)\n", height);
+        fprintf(stderr, "ERROR (Write mode): height must be greater than 0 (%d wag given) [HEIGHT_LOWER_OR_EQUAL_TO_ZERO]\n", height);
         return EXIT_FAILURE;
     }
     if (edge_weight_min < 0)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be greater or equal to 0 (%f was given)\n", edge_weight_min);
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be greater or equal to 0 (%f was given) [EDGE_WEIGHT_MIN_LOWER_THAN_ZERO]\n", edge_weight_min);
         return EXIT_FAILURE;
     }
     if (edge_weight_max > 1)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be lower or equal to 1 (%f was given)\n", edge_weight_max);
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be lower or equal to 1 (%f was given) [EDGE_WEIGHT_MAX_GREATER_THAN_ONE]\n", edge_weight_max);
         return EXIT_FAILURE;
     }
     if (edge_weight_min > edge_weight_max)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_weight_min (%f was given) must be lower or equal to edge_weight_max (%f was given)\n", edge_weight_min, edge_weight_max);
+        fprintf(stderr, "ERROR (Write mode): edge_weight_min (%f was given) must be lower or equal to edge_weight_max (%f was given) [EDGE_WEIGHT_MIN_GREATER_THAN_EDGE_WEIGHT_MAX]\n", edge_weight_min, edge_weight_max);
         return EXIT_FAILURE;
     }
     if (edge_count_min < 0)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_count_min must be greater or equal to 0 (%d was given)\n", edge_count_min);
+        fprintf(stderr, "ERROR (Write mode): edge_count_min must be greater or equal to 0 (%d was given) [EDGE_COUNT_MIN_LOWER_THAN_ZERO]\n", edge_count_min);
         return EXIT_FAILURE;
     }
     if (edge_count_max > 4)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_count_max must be lower or equal to 4 (%d was given)\n", edge_count_max);
+        fprintf(stderr, "ERROR (Write mode): edge_count_max must be lower or equal to 4 (%d was given) [EDGE_WEIGHT_MAX_GREATER_THAN_FOUR]\n", edge_count_max);
         return EXIT_FAILURE;
     }
     if (edge_count_min > edge_count_max)
     {
-        fprintf(stderr, "ERROR (Write mode): edge_count_min (%d was given) must be lower or equal to edge_count_max (%d was given)\n", edge_count_min, edge_count_max);
+        fprintf(stderr, "ERROR (Write mode): edge_count_min (%d was given) must be lower or equal to edge_count_max (%d was given) [EDGE_COUNT_MIN_GREATER_THAN_EDGE_COUNT_MAX]\n", edge_count_min, edge_count_max);
         return EXIT_FAILURE;
     }
     if (file == NULL)
@@ -239,7 +239,7 @@ int read_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Read mode): shortest_path_a must be a positive number\n");
+                fprintf(stderr, "ERROR (Read mode): shortest_path_a must be a positive number [SHORTEST_PATH_A_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -254,7 +254,7 @@ int read_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Read mode): shortest_path_b must be a positive number\n");
+                fprintf(stderr, "ERROR (Read mode): shortest_path_b must be a positive number [SHORTEST_PATH_B_NOT_POSITIVE_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -284,18 +284,18 @@ int read_init(int argc, char* argv[])
     {
         if (shortest_path_a < 0)
         {
-            fprintf(stderr, "ERROR (Read mode): shortest_path_a argument is required when shortest_path_b is specified\n");
+            fprintf(stderr, "ERROR (Read mode): shortest_path_a argument is required when shortest_path_b is specified [SHORTEST_PATH_B_WITHOUT_SHORTEST_PATH_A_SPECIFIED]\n");
             return EXIT_FAILURE;
         }
         else if (shortest_path_b == shortest_path_a)
         {
-            fprintf(stderr, "ERROR (Read mode): shortest_path_b (%d was given) cannot be equal to shortest_path_a (%d was given)\n", shortest_path_b, shortest_path_a);
+            fprintf(stderr, "ERROR (Read mode): shortest_path_b (%d was given) cannot be equal to shortest_path_a (%d was given) [SHORTEST_PATH_B_EQUAL_TO_SHORTEST_PATH_A]\n", shortest_path_b, shortest_path_a);
             return EXIT_FAILURE;
         }
     }
     if (!at_least_one_option_chosen)
     {
-        fprintf(stderr, "ERROR (Read mode): At least one of checking options has to be chosen\n");
+        fprintf(stderr, "ERROR (Read mode): At least one of checking options has to be chosen [CHECKING_OPTION_NOT_SPECIFIED]\n");
         return EXIT_FAILURE;
     }
     if (file == NULL)
@@ -322,7 +322,7 @@ int main(int argc, char* argv[])
                 return read_init(argc, argv);
             }
         }
-        fprintf(stderr, "ERROR: Mode not specified\n");
+        fprintf(stdout, "%s", help);
         return EXIT_FAILURE;
     }
     else

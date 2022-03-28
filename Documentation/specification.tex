@@ -26,9 +26,9 @@
     \thispagestyle{empty}
 
 
-
     \newpage
     \chapter{Specyfikacja funkcjonalna}
+
 
     \newpage
     \section{Cel projektu}
@@ -64,5 +64,77 @@
     \newpage
     \section{Opis wywołania}
     \subsection{Tryb zapisu}
+    Wywołanie:\\
+    \\
+    \verb|./gridgraph --write/-w [argumenty]|\\
+    \\
+    Argumenty:
+    \begin{itemize}
+        \begin{samepage}
+            \item \verb|--width/-xw| (Szerokość grafu - liczba kolumn)
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $>$ 0 
+                \item[Wymagany:] TAK
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--height/-xh| (Wysokość grafu - liczba wierszy)
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $>$ 0 
+                \item[Wymagany:] TAK
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--edge_weight_min/-Wmin| (Minimalna waga pojedyńczej krawędzi)
+            \begin{description}
+                \item[Typ:] Liczba rzeczywista
+                \item[Zakres:] $<$0, edge\_weight\_max$>$
+                \item[Wymagany:] NIE (domyślnie: 0)
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--edge_weight_max/-Wmax| (Maksymalna waga pojedyńczej krawędzi)
+            \begin{description}
+                \item[Typ:] Liczba rzeczywista
+                \item[Zakres:] $<$edge\_weight\_min, 1$>$
+                \item[Wymagany:] NIE (domyślnie: 1)
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--edge_count_min/-Cmin| (Minimalna liczba krawędzi wychodzących z jednego wierzchołka)\footnote{Program będzie dążył do utworzenia co najmniej edge\_count\_min krawędzi, ale nie może tego zagwarantować. Nie jest możliwe wygenerowanie więcej niż 2 krawędzi dla wierzchołków w narożnikach oraz więcej niż 3 dla wierzchołków bocznych. Nie jest możliwe także utworzenie krawędzi, jeżeli wszystkie wierzchołki wokół osiągnęły już swoją nominalną (wylosowaną z podanego przedziału) liczbę krawędzi.}
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $<$0, edge\_count\_max$>$
+                \item[Wymagany:] NIE (domyślnie: 0)
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--edge_count_max/-Cmax| (Maksymalna liczba krawędzi wychodzących z jednego wierzchołka)
+            \begin{description}
+                \item[Typ:] Liczba naturalna
+                \item[Zakres:] $<$edge\_count\_min, 4$>$
+                \item[Wymagany:] NIE (domyślnie: 4)
+            \end{description}
+        \end{samepage}
+        \begin{samepage}
+            \item \verb|--file/-f| (Plik w którym ma zostać zapisany graf)
+            \begin{description}
+                \item[Typ:] Ścieżka do pliku
+                \item[Zakres:] -
+                \item[Wymagany:] NIE (domyślnie: standardowe wyjście)
+            \end{description}
+        \end{samepage}
+    \end{itemize}
+    Przykład:\\
+    \verb|./gridgraph -w -xw 6 -xh 6 --Wmin 0.65 --Wmax 0.2 -Cmax 3 -f "/home/user/graph”|
+    \\
+    \\
+    Powyższy przykład ilustruje wywołanie programu, który generuje graf o 6 kolumnach i 6 wierszach, z wagami krawędzi mieszczącymi się w przedziale od 0.2 do 0.65, gdzie minimalna ilość krawędzi wychodzących z wierzchołka to 0, a maksymalna ilość krawędzi to 3. Program zapisuje graf w odpowiednim formacie do pliku o nazwie \verb|graph| znajdującego się w \verb|/home/user|.
+
+
+
+
     
 \end{document}

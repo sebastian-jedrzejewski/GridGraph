@@ -6,7 +6,6 @@
 #include "bfs.h"
 
 #define MAX_LINE_LEN 1024
-#define MAX_VERTICES_IN_LINE 128
 
 
 int path_fill(d_result result, int *nv, int from, int to)
@@ -126,6 +125,13 @@ int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
         return 1;
     else 
     {
+        if(vertex_a >= g->height * g->width || vertex_b >= g->height * g->width)
+        {
+            fprintf(stderr, "ERROR: Invalid number of vertex in shortest_path_a (sA) or "
+            "shortest_path_b (sB)\n");
+            return EXIT_FAILURE;
+        }
+        
         if(connectivity == 1)
         {
             bfs_init(g, vertex_a);

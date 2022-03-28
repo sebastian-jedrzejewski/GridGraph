@@ -11,6 +11,6 @@ typedef struct r {
 
 d_result result_init(int n, int vertex_a, int *visited);
 void result_free(d_result result);
-d_result Dijkstra(graph graph, int vertex_a, int vertex_b);
+d_result dijkstra(graph graph, int vertex_a, int vertex_b);
 
 #endif

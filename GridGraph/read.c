@@ -32,9 +32,9 @@ void path_display(d_result result, int *nv, int l)
     }
 }
 
-void bfs_init(graph g, int vertex_a)
+void bfs_init(graph g)
 {
-    int *visited = bfs(g, vertex_a > 0 ? vertex_a : 0);
+    int *visited = bfs(g, 0);
     int c = 0;
     while(visited[c++] && c < g->height * g->width)
         ;
@@ -134,7 +134,7 @@ int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
         
         if(connectivity == 1)
         {
-            bfs_init(g, vertex_a);
+            bfs_init(g);
         }
 
         if(vertex_a >= 0)

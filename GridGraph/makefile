@@ -30,4 +30,5 @@ clean:
 
 
 test: all
-	./gridgraph -w -xh 6 -xw 6 -Wmin 0.5 -Wmax 0.9 -Cmin 1 -Cmax 3
+	./gridgraph -w -xh 6 -xw 6 -Wmin 0.5 -Wmax 0.9 -Cmin 1 -Cmax 3 -f "test"
+	./gridgraph -r -c -sA 0 -f "test"

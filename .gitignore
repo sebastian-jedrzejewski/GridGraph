@@ -9,3 +9,4 @@ GridGraph/*
 Documentation/*
 
 !Documentation/*.tex
+!Documentation/*.pdf

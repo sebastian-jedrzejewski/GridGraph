@@ -127,12 +127,12 @@ int read(FILE *file, int connectivity, int vertex_a, int vertex_b)
     {
         if(vertex_a >= g->height * g->width || vertex_b >= g->height * g->width)
         {
-            fprintf(stderr, "ERROR (Read mode): Number of vertex in shortest_path_a is greater than total number of vertices [SHORTEST_PATH_A_GREATER_THAN_TOTAL_NUMBER_OF_VERICES]\n");
+            fprintf(stderr, "ERROR (Read mode): Number of vertex in shortest_path_a is greater than total number of vertices [SHORTEST_PATH_A_GREATER_THAN_TOTAL_NUMBER_OF_VERTICES]\n");
             return EXIT_FAILURE;
         }
         if (vertex_b >= g->height * g->width)
         {
-            fprintf(stderr, "ERROR (Read mode): Number of vertex in shortest_path_b is greater than total number of vertices [SHORTEST_PATH_B_GREATER_THAN_TOTAL_NUMBER_OF_VERICES]\n");
+            fprintf(stderr, "ERROR (Read mode): Number of vertex in shortest_path_b is greater than total number of vertices [SHORTEST_PATH_B_GREATER_THAN_TOTAL_NUMBER_OF_VERTICES]\n");
             return EXIT_FAILURE;
         }
         

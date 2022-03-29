@@ -84,7 +84,7 @@ graph gen_graph(int width, int height, double edge_weight_min, double edge_weigh
             memmove(available_vertices + index, available_vertices + index + 1, sizeof(int) * (available_vertices_count - (index + 1)));
             available_vertices_count--;
 
-            double weight = rand() / (RAND_MAX / (edge_weight_max - edge_weight_min));
+            double weight = ((double)rand() / RAND_MAX) * (edge_weight_max - edge_weight_min) + edge_weight_min;
 
             graph->list[i] = edge_list_add(graph->list[i], vertex, weight);
             graph->list[vertex] = edge_list_add(graph->list[vertex], i, weight);

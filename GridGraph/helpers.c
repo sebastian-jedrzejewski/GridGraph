@@ -35,7 +35,15 @@ int str_is_float(char* string)
     int dot = 0;
     for (int i = 0; string[i] != '\0'; i++)
     {
-        if (!(string[i] >= '0' && string[i] <= '9') || (string[i] == '.' && dot))
+        if (string[i] >= '0' && string[i] <= '9')
+        {
+            continue;
+        }
+        else if (string[i] == '.' && !dot)
+        {
+            dot = 1;
+        }
+        else
         {
             return 0;
         }

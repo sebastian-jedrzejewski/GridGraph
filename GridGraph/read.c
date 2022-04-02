@@ -21,7 +21,7 @@ int path_fill(d_result result, int *nv, int from, int to)
     return l;
 }
 
-void path_display(d_result result, int *nv, int l)
+void path_display(int *nv, int l)
 {
     int j;
     for(j = l-1; j >= 0; j--)
@@ -48,7 +48,7 @@ void bfs_init(graph g)
 void dijkstra_init(graph g, int vertex_a, int vertex_b)
 {
     int i, j, l;
-    d_result result = dijkstra(g, vertex_a, vertex_b);
+    d_result result = dijkstra(g, vertex_a);
 
     int *nv = malloc(g->height * g->width * sizeof *nv);
 
@@ -58,7 +58,7 @@ void dijkstra_init(graph g, int vertex_a, int vertex_b)
         l = path_fill(result, nv, vertex_a, vertex_b);
         if(l > 0)
         {
-            path_display(result, nv, l);
+            path_display(nv, l);
             printf("(%g)\n", result->d[vertex_b]);
         }
         else
@@ -73,7 +73,7 @@ void dijkstra_init(graph g, int vertex_a, int vertex_b)
             printf("Path to %d (weight): ", i);
             if(l > 0)
             {
-                path_display(result, nv, l);
+                path_display(nv, l);
                 printf("(%g)\n", result->d[i]);
             }
             else

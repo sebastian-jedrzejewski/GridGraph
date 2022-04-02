@@ -19,6 +19,24 @@ graph graph_init(int w, int h)
     return g;
 }
 
+// FREE UP MEMORY ALLOCATED FOR THE GRAPH
+void graph_free(graph g)
+{
+    for (int i = 0; i < g->height * g->width; i++)
+    {
+        edge_list* head = g->list[i];
+        edge_list* tmp;
+        while (head != NULL)
+        {
+            tmp = head;
+            head = head->next;
+            free(tmp);
+        }
+        free(head);
+    }
+    free(g);
+}
+
 // ADD NEW EDGE TO SPECIFIED EDGE_LIST (VERTEX)
 edge_list* edge_list_add(edge_list *l, int v, double wt)
 {
@@ -74,22 +92,4 @@ int edge_list_length(edge_list* l)
         }
     }
     return counter;
-}
-
-// FREE UP MEMORY ALLOCATED FOR THE GRAPH
-void graph_free(graph g)
-{
-    for (int i = 0; i < g->height * g->width; i++)
-    {
-        edge_list* head = g->list[i];
-        edge_list* tmp;
-        while (head != NULL)
-        {
-            tmp = head;
-            head = head->next;
-            free(tmp);
-        }
-        free(head);
-    }
-    free(g);
 }

@@ -3,6 +3,7 @@
 #include <limits.h>
 
 #include "dijkstra.h"
+#include "graph.h"
 
 d_result result_init(int n, int vertex_a, int *visited)
 {

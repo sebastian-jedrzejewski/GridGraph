@@ -3,7 +3,8 @@
 
 #include "graph.h"
 
-typedef struct r {
+typedef struct r
+{
     double *d;
     int *p;
 } *d_result;

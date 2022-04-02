@@ -97,7 +97,7 @@ int write_init(int argc, char* argv[])
         else if (str_arr_get_index(argv[i], w_edge_weight_min_o, 2) >= 0)
         {
             i++;
-            if (i < argc && str_is_float(argv[i])) 
+            if (i < argc && str_is_double(argv[i])) 
             {
                 edge_weight_min = atof(argv[i]);
             }
@@ -112,7 +112,7 @@ int write_init(int argc, char* argv[])
         else if (str_arr_get_index(argv[i], w_edge_weight_max_o, 2) >= 0)
         {
             i++;
-            if (i < argc && str_is_float(argv[i])) 
+            if (i < argc && str_is_double(argv[i])) 
             {
                 edge_weight_max = atof(argv[i]);
             }

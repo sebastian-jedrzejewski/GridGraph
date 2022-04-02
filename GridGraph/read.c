@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "bfs.h"
+#include "dijkstra.h"
 #include "graph.h"
 #include "read.h"
-#include "bfs.h"
 
 #define MAX_LINE_LEN 1024
 

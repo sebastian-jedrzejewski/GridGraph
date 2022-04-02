@@ -29,8 +29,8 @@ int str_is_int(char* string)
     return 1;
 }
 
-// CHECK IF STRING IS FLOAT (positive)
-int str_is_float(char* string)
+// CHECK IF STRING IS DOUBLE (positive)
+int str_is_double(char* string)
 {
     int dot = 0;
     for (int i = 0; string[i] != '\0'; i++)

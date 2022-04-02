@@ -31,7 +31,7 @@ void result_free(d_result result)
     free(result);
 }
 
-d_result dijkstra(graph graph, int vertex_a, int vertex_b)
+d_result dijkstra(graph graph, int vertex_a)
 {
     int n = graph->height * graph->width;
     int *visited = malloc(n * sizeof *visited);

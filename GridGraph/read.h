@@ -8,7 +8,7 @@
 int read(FILE *file, int connectivity, int vertex_a, int vertex_b);
 graph read_graph(FILE *f);
 int path_fill(d_result result, int *nv, int from, int to);
-void path_display(d_result result, int *nv, int l);
+void path_display(int *nv, int l);
 void bfs_init(graph g);
 void dijkstra_init(graph g, int vertex_a, int vertex_b);
 

@@ -112,6 +112,12 @@
             \item[Zakres:] $<$edge\_count\_min, 4$>$
             \item[Wymagany:] NIE (domyślnie: 4)
         \end{description}
+        \item \verb|--seed/-s| (Ziarno generatora liczb losowych)
+        \begin{description}
+            \item[Typ:] Liczba całkowita
+            \item[Zakres:] Zbiór liczb całkowitych
+            \item[Wymagany:] NIE
+        \end{description}
         \item \verb|--file/-f| (Plik w którym ma zostać zapisany graf)
         \begin{description}
             \item[Typ:] Ścieżka do pliku
@@ -120,7 +126,7 @@
         \end{description}
     \end{itemize}
     Przykład:\\
-    \verb|./gridgraph -w -xw 6 -xh 6 --Wmin 0.65 --Wmax 0.2 -Cmax 3 -f "/home/user/graph”|
+    \verb|./gridgraph -w -xw 6 -xh 6 -Wmin 0.65 -Wmax 0.2 -Cmax 3 -f "/home/user/graph”|
     \\
     \\
     Powyższy przykład ilustruje wywołanie programu, który generuje graf o 6 kolumnach i 6 wierszach, z wagami krawędzi mieszczącymi się w przedziale od 0.2 do 0.65, gdzie minimalna ilość krawędzi wychodzących z wierzchołka to 0, a maksymalna ilość krawędzi to 3. Program zapisuje graf w odpowiednim formacie do pliku o nazwie \verb|graph| znajdującego się w \verb|/home/user|.
@@ -182,12 +188,13 @@
     W przypadku błędu program wypisuje błąd na standardowy strumień błędów i zwraca 1. Komunikat błędów jest poprzecony słowem \verb|ERROR| oraz nazwą trybu w nawiasie (np. \verb|(Write mode)|), jeżeli błąd dotyczy konkretnego trybu.\\
     Poniżej przedstawione są komunikaty generowane przez program, gdy ten wykryje błąd, wraz z ich wyjaśnieniem:\\
     \begin{description}
-        \item[WIDTH\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|width|, ale nie została podana wartość lub wartość nie jest liczbą.
-        \item[HEIGHT\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|height|, ale nie została podana wartość lub wartość nie jest liczbą.
-        \item[EDGE\_WEIGHT\_MIN\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_weight_min|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
-        \item[EDGE\_WEIGHT\_MAX\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_weight_max|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
-        \item[EDGE\_COUNT\_MIN\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_count_min|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
-        \item[EDGE\_COUNT\_MAX\_NOT\_POSITIVE\_NUMBER] Został wybrany argument \verb|edge_count_max|, ale nie została podana wartość lub wartość nie jest liczbą (nieujemną).
+        \item[WIDTH\_NOT\_A\_NUMBER] Został wybrany argument \verb|width|, ale nie została podana wartość lub wartość nie jest liczbą (całkowitą).
+        \item[HEIGHT\_NOT\_A\_NUMBER] Został wybrany argument \verb|height|, ale nie została podana wartość lub wartość nie jest liczbą (całkowitą).
+        \item[EDGE\_WEIGHT\_MIN\_NOT\_A\_NUMBER] Został wybrany argument \verb|edge_weight_min|, ale nie została podana wartość lub wartość nie jest liczbą.
+        \item[EDGE\_WEIGHT\_MAX\_NOT\_A\_NUMBER] Został wybrany argument \verb|edge_weight_max|, ale nie została podana wartość lub wartość nie jest liczbą.
+        \item[EDGE\_COUNT\_MIN\_NOT\_A\_NUMBER] Został wybrany argument \verb|edge_count_min|, ale nie została podana wartość lub wartość nie jest liczbą (całkowitą).
+        \item[EDGE\_COUNT\_MAX\_NOT\_A\_NUMBER] Został wybrany argument \verb|edge_count_max|, ale nie została podana wartość lub wartość nie jest liczbą (całkowitą).
+        \item[SEED\_NOT\_A\_NUMBER] Został wybrany argument \verb|seed|, ale nie została podana wartość lub wartość nie jest liczbą (całkowitą).
         \item[WIDTH\_LOWER\_OR\_EQUAL\_TO\_ZERO] Wartość argumentu \verb|width| jest mniejsza lub równa 0 (musi być większa od 0).
         \item[HEIGHT\_LOWER\_OR\_EQUAL\_TO\_ZERO] Wartość argumentu \verb|height| jest mniejsza lub równa 0 (musi być większa od 0).
         \item[EDGE\_WEIGHT\_MIN\_LOWER\_THAN\_ZERO] Wartość argumentu \verb|edge_weight_min| jest mniejsza od 0 (musi być większa lub równa 0 i mniejsza lub równa \verb|edge_weight_max|).
@@ -301,12 +308,12 @@
     Stała ta przechowuje informację o wagach losowania dla poszczególnych liczb krawędzi. Na przykład wartości \verb|{1,2,3,4,5}| oznaczają że wraz z liczbą krawędzi rośnie szansa na wylosowanie danej liczby krawędzi, gdyż tablica z której losowana będzie liczba krawędzi będzie wyglądać tak: \verb|{0,1,1,2,2,2,3,3,3,3,4,4,4,4,4}|.\\
     \subsection{Funkcja gen\_graph}
     \verb|graph gen_graph(int width, int height, double edge_weight_min, double edge_weight_max,|\\
-    \verb|                int edge_count_min, int edge_count_max)|\\
+    \verb|                int edge_count_min, int edge_count_max, int seed)|\\
     \\
     Funkcja ta odpowiada za wygenerowanie grafu o szerokości (ilości kolumn) \verb|width|, wysokości (ilości wierzy) \verb|height|, gdzie każdy wierzchołek będzie miał maksymalnie \verb|edge_count_max| i (w miarę możliwości) minimalnie \verb|edge_count_min| krawędzi\footnote{liczba krawedzi jest losowana; patrz "Stała ec\_drawing\_weight"}, z których każda będzie miała wagę mieszczącą się w przedziale od \verb|edge_weight_min| do \verb|edge_weight_max| włącznie. Funkcja zwraca graf.\\
     \subsection{Funkcja write}
     \verb|int write(FILE* file, int width, int height, double edge_weight_min,|\\
-    \verb|          double edge_weight_max, int edge_count_min, int edge_count_max)|\\
+    \verb|          double edge_weight_max, int edge_count_min, int edge_count_max, int seed)|\\
     \\
     Funkcja ta wywołuje funkcję \verb|gen_graph| (przekazując jej jednocześnie wszystkie swoje parametry poza \verb|file|), a następnie zapisuje uzyskany graf do pliku \verb|file|. Funkcja zwraca wartości \verb|EXIT_SUCCESS| lub \verb|EXIT_FAILURE| (funkcja nie przewiduje wystąpienia błędu, więc w praktyce jest to tylko \verb|EXIT_SUCCESS|).
 
@@ -470,7 +477,7 @@
     \begin{itemize}
         \item \verb|str_arr_get_index|*
         \item \verb|str_is_int|*
-        \item \verb|str_is_float|*
+        \item \verb|str_is_double|*
     \end{itemize}
     Plik nagłówkowy (\verb|helpers.h|) zawiera deklaracje zaznaczonych funkcji z pliku źródłowego (*).\\
     \subsection{Funkcja str\_arr\_get\_index}
@@ -480,11 +487,11 @@
     \subsection{Funkcja str\_is\_int}
     \verb|int str_is_int(char* string)|\\
     \\
-    Funkcja ta odpowiada za sprawdzenie czy napis \verb|string| jest liczbą całkowitą nieujemną (tzn. napis zawiera tylko cyfry). Funkcja zwraca wartości 1/0 (prawda/fałsz).\\
+    Funkcja ta odpowiada za sprawdzenie czy napis \verb|string| jest liczbą całkowitą (tzn. napis zawiera tylko cyfry i ewentualnie znak minus na początku). Funkcja zwraca wartości 1/0 (prawda/fałsz).\\
     \subsection{Funkcja str\_is\_double}
     \verb|int str_is_double(char* string)|\\
     \\
-    Funkcja ta odpowiada za sprawdzenie czy napis \verb|string| jest liczbą rzeczywistą nieujemną (tzn. napis zawiera tylko cyfry i jedną kropkę). Funkcja zwraca wartości 1/0 (prawda/fałsz).\\
+    Funkcja ta odpowiada za sprawdzenie czy napis \verb|string| jest liczbą rzeczywistą (tzn. napis zawiera tylko cyfry oraz ewentualnie jedną kropkę i znak minus na początku). Funkcja zwraca wartości 1/0 (prawda/fałsz).\\
 
     \newpage
     \section{Plik makefile}

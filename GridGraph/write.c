@@ -13,9 +13,9 @@ const int ec_drawing_weight[5] = {1, 2, 4, 8, 16};
 
 
 // GENERATE GRAPH
-graph gen_graph(int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max)
+graph gen_graph(int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max, int seed)
 {
-    srand(time(0));
+    srand(seed);
 
     // Sum of weights
     int ec_weight_sum = 0;
@@ -96,10 +96,10 @@ graph gen_graph(int width, int height, double edge_weight_min, double edge_weigh
 }
 
 // MAIN WRITE MODE FUNCTION
-int write(FILE* file, int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max) 
+int write(FILE* file, int width, int height, double edge_weight_min, double edge_weight_max, int edge_count_min, int edge_count_max, int seed) 
 {
     // Generate graph
-    graph graph = gen_graph(width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);
+    graph graph = gen_graph(width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max, seed);
 
     // Write graph to file
     fprintf(file, "%d %d\n", height, width);

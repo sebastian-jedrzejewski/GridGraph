@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "graph.h"
 #include "helpers.h"
@@ -16,6 +17,7 @@ const char* w_edge_weight_min_o[2] = { "--edge_weight_min", "-Wmin" };
 const char* w_edge_weight_max_o[2] = { "--edge_weight_max", "-Wmax" };
 const char* w_edge_count_min_o[2] = { "--edge_count_min", "-Cmin" };
 const char* w_edge_count_max_o[2] = { "--edge_count_max", "-Cmax" };
+const char* w_seed_o[2] = { "--seed", "-s" };
 
 const char* read_o[2] = { "--read", "-r" };
 const char* r_connectivity_o[2] = { "--connectivity", "-c" };
@@ -33,12 +35,13 @@ const char* help =
 "--read/-r                  read mode (reads graph from file/stdin and checks specified parameters)\n"
 "\n"
 "Write mode options (* = optional):\n"
-"--width/-xw                graph width (number of colums)\n"
-"--height/-xh               graph height (number of rows)\n"
+"--width/-xw                graph width (number of colums) [must be integer]\n"
+"--height/-xh               graph height (number of rows) [must be integer]\n"
 "--edge_weight_min/-Wmin    *edge weight randomizer lower bound [must be >=0; default: 0]\n"
-"--edge_weight_max/-Wmax    *edge weight randomizer upper bound [must be <=1 & >=edge_weight_min; default: 1]\n"
-"--edge_count_min/-Cmin     *single-vertex edge count randomizer lower bound (not guaranteed) [must be >=0 & <=edge_count_max; default: 0]\n"
-"--edge_count_max/-Cmax     *single-vertex edge count randomizer upper bound [must be <=4 & >=edge_count_min; default: 4]\n"
+"--edge_weight_max/-Wmax    *edge weight randomizer upper bound [must be <=1 & >=edge_weight_min & ; default: 1]\n"
+"--edge_count_min/-Cmin     *single-vertex edge count randomizer lower bound (not guaranteed) [must be >=0 & <=edge_count_max & integer; default: 0]\n"
+"--edge_count_max/-Cmax     *single-vertex edge count randomizer upper bound [must be <=4 & >=edge_count_min & integer; default: 4]\n"
+"--seed/-s                  *custom randomizer seed [must be integer]"
 "\n"
 "Read mode options (at least one required; ~ = switch):\n"
 "--connectivity/-c          ~check connectivity\n"
@@ -58,6 +61,7 @@ int write_init(int argc, char* argv[])
     double edge_weight_max = 1;
     int edge_count_min = 0;
     int edge_count_max = 4;
+    int seed = time(0);
     FILE* file = NULL;
 
     // Get values
@@ -73,7 +77,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): width must be a positive number [WIDTH_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): width must be a number (integer) [WIDTH_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -88,7 +92,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): height must be a positive number [HEIGHT_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): height must be a number (integer) [HEIGHT_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -103,7 +107,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_weight_min must be a positive number [EDGE_WEIGHT_MIN_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): edge_weight_min must be a number [EDGE_WEIGHT_MIN_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -118,7 +122,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_weight_max must be a positive number [EDGE_WEIGHT_MAX_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): edge_weight_max must be a number [EDGE_WEIGHT_MAX_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -133,7 +137,7 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_count_min must be a positive number [EDGE_COUNT_MIN_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): edge_count_min must be a number (integer) [EDGE_COUNT_MIN_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -148,7 +152,22 @@ int write_init(int argc, char* argv[])
             }
             else
             {
-                fprintf(stderr, "ERROR (Write mode): edge_count_max must be a positive number [EDGE_COUNT_MAX_NOT_POSITIVE_NUMBER]\n");
+                fprintf(stderr, "ERROR (Write mode): edge_count_max must be a number (integer) [EDGE_COUNT_MAX_NOT_A_NUMBER]\n");
+                return EXIT_FAILURE;
+            }
+        }
+
+        // seed
+        else if (str_arr_get_index(argv[i], w_seed_o, 2) >= 0)
+        {
+            i++;
+            if (i < argc && str_is_int(argv[i])) 
+            {
+                seed = atoi(argv[i]);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR (Write mode): seed must be a number (integer) [SEED_NOT_A_NUMBER]\n");
                 return EXIT_FAILURE;
             }
         }
@@ -209,7 +228,7 @@ int write_init(int argc, char* argv[])
     {
         file = stdout;
     }
-    return write(file, width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max);
+    return write(file, width, height, edge_weight_min, edge_weight_max, edge_count_min, edge_count_max, seed);
 }
 
 // READ MODE INIT

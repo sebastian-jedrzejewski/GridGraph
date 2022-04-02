@@ -16,10 +16,13 @@ int str_arr_get_index(char* element, const char* array[], int length)
     return -1;
 }
 
-// CHECK IF STRING IS INT (positive)
+// CHECK IF STRING IS INT
 int str_is_int(char* string)
 {
-    for (int i = 0; string[i] != '\0'; i++)
+    int i = 0;
+    if (string[i] == '-') i++;
+    if (string[i] == '\0') return 0;
+    for (i; string[i] != '\0'; i++)
     {
         if (!(string[i] >= '0' && string[i] <= '9'))
         {
@@ -29,11 +32,14 @@ int str_is_int(char* string)
     return 1;
 }
 
-// CHECK IF STRING IS DOUBLE (positive)
+// CHECK IF STRING IS DOUBLE
 int str_is_double(char* string)
 {
+    int i = 0;
+    if (string[i] == '-') i++;
+    if (string[i] == '\0') return 0;
     int dot = 0;
-    for (int i = 0; string[i] != '\0'; i++)
+    for (i; string[i] != '\0'; i++)
     {
         if (string[i] >= '0' && string[i] <= '9')
         {

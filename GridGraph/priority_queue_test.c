@@ -4,7 +4,7 @@
 
 #include "priority_queue.h"
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
     int n = argc > 1 ? atoi(argv[1]) : 10;
     FILE *f = argc > 2 ? fopen(argv[2], "w") : stdout;
@@ -36,4 +36,4 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 
-}
+}*/

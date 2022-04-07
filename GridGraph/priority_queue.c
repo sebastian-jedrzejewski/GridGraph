@@ -86,6 +86,8 @@ static void heap_down(pq p_queue, double *d)
 int pq_pop(pq p_queue, double *d)
 {
     int u = p_queue->q[0];
+    p_queue->pn[p_queue->q[0]] = -1;
+    p_queue->pn[p_queue->q[p_queue->n-1]] = 0;
     p_queue->q[0] = p_queue->q[--p_queue->n];
     heap_down(p_queue, d);
     return u;    

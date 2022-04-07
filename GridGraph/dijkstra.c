@@ -4,6 +4,7 @@
 
 #include "dijkstra.h"
 #include "graph.h"
+#include "priority_queue.h"
 
 d_result result_init(int n, int vertex_a, int *visited)
 {
@@ -15,10 +16,7 @@ d_result result_init(int n, int vertex_a, int *visited)
     for(i = 0; i < n; i++)
     {
         *visited = 0;
-        if(i == vertex_a)
-            result->d[i] = 0;
-        else
-            result->d[i] = INT_MAX;
+        result->d[i] = INT_MAX;
         result->p[i] = -1;
         visited++;
     }
@@ -37,25 +35,37 @@ d_result dijkstra(graph graph, int vertex_a)
     int n = graph->height * graph->width;
     int *visited = malloc(n * sizeof *visited);
 
-    int i, j, x;
+    int i, j, u;
     edge_list *iter = NULL;
 
     d_result result = result_init(n, vertex_a, visited);
 
+    pq p_queue = pq_init(n);
+
+    // Heap set
     for(i = 0; i < n; i++)
     {
-        for(j = 0; visited[j]; j++)
-            ;
-        
-        x = j;
-        for(j = x; j < n; j++)
-            if(result->d[j] < result->d[x] && !visited[j])
-             x = j;
-        
-        visited[x] = 1;
+        p_queue->q[i] = i;
+        p_queue->pn[i] = i;
+    }
+    p_queue->n = n;
 
-        
-        iter = graph->list[x];
+    result->d[vertex_a] = 0;
+
+    // Keeping heap properties
+    p_queue->q[0] = p_queue->q[vertex_a];
+    p_queue->q[vertex_a] = 0;
+    p_queue->pn[0] = vertex_a;
+    p_queue->pn[vertex_a] = 0;
+
+    while(!pq_is_empty(p_queue))
+    {
+        int u = pq_pop(p_queue, result->d);
+
+        visited[u] = 1;
+
+        iter = graph->list[u];
+        //printf("%d\n", iter->vertex);
         while(iter != NULL)
         {
             if(visited[iter->vertex])
@@ -63,12 +73,17 @@ d_result dijkstra(graph graph, int vertex_a)
                 iter = iter->next;
                 continue;
             }
-            else
-                if(result->d[iter->vertex] > result->d[x] + iter->weight)
-                    result->d[iter->vertex] = result->d[x] + iter->weight;
-            result->p[iter->vertex] = x;
+
+            if(result->d[iter->vertex] > result->d[u] + iter->weight)
+                result->d[iter->vertex] = result->d[u] + iter->weight;
+            result->p[iter->vertex] = u;
+            heap_up(p_queue, result->d, p_queue->pn[iter->vertex]);
             iter = iter->next;
         }
     }
+    /*for(i = 0; i < n; i++)
+    {
+        printf("d[%d] = %g, p[%d] = %d\n", i, result->d[i], i, result->p[i]);
+    }*/
     return result;
 }

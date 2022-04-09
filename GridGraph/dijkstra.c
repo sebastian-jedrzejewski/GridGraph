@@ -6,7 +6,7 @@
 #include "graph.h"
 #include "priority_queue.h"
 
-d_result result_init(int n, int vertex_a, int *visited)
+d_result result_init(int n, int vertex_a)
 {
     d_result result = malloc(sizeof *result);
     result->d = malloc(n * sizeof *(result->d));
@@ -15,10 +15,8 @@ d_result result_init(int n, int vertex_a, int *visited)
     int i;
     for(i = 0; i < n; i++)
     {
-        *visited = 0;
         result->d[i] = INT_MAX;
         result->p[i] = -1;
-        visited++;
     }
     return result;
 }
@@ -38,7 +36,7 @@ d_result dijkstra(graph graph, int vertex_a)
     int i, j, u;
     edge_list *iter = NULL;
 
-    d_result result = result_init(n, vertex_a, visited);
+    d_result result = result_init(n, vertex_a);
 
     pq p_queue = pq_init(n);
 
@@ -62,22 +60,15 @@ d_result dijkstra(graph graph, int vertex_a)
     {
         int u = pq_pop(p_queue, result->d);
 
-        visited[u] = 1;
-
         iter = graph->list[u];
-        //printf("%d\n", iter->vertex);
         while(iter != NULL)
         {
-            if(visited[iter->vertex])
+            if(result->d[iter->vertex] > result->d[u] + iter->weight) 
             {
-                iter = iter->next;
-                continue;
-            }
-
-            if(result->d[iter->vertex] > result->d[u] + iter->weight)
                 result->d[iter->vertex] = result->d[u] + iter->weight;
-            result->p[iter->vertex] = u;
-            heap_up(p_queue, result->d, p_queue->pn[iter->vertex]);
+                result->p[iter->vertex] = u;
+                heap_up(p_queue, result->d, p_queue->pn[iter->vertex]);
+            }
             iter = iter->next;
         }
     }

@@ -28,7 +28,7 @@ void result_free(d_result result)
     free(result);
 }
 
-d_result dijkstra(graph graph, int vertex_a)
+d_result dijkstra(graph graph, int vertex_a, int vertex_b)
 {
     int n = graph->height * graph->width;
     int *visited = malloc(n * sizeof *visited);
@@ -64,13 +64,15 @@ d_result dijkstra(graph graph, int vertex_a)
         while(iter != NULL)
         {
             if(result->d[iter->vertex] > result->d[u] + iter->weight) 
-            {
+            {    
                 result->d[iter->vertex] = result->d[u] + iter->weight;
                 result->p[iter->vertex] = u;
                 heap_up(p_queue, result->d, p_queue->pn[iter->vertex]);
             }
             iter = iter->next;
         }
+        if(u == vertex_b)
+            return result;
     }
     /*for(i = 0; i < n; i++)
     {

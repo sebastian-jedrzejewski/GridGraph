@@ -13,6 +13,6 @@ typedef struct r
 // FUNCTIONS DECLARATIONS
 d_result result_init(int n, int vertex_a);
 void result_free(d_result result);
-d_result dijkstra(graph graph, int vertex_a);
+d_result dijkstra(graph graph, int vertex_a, int vertex_b);
 
 #endif

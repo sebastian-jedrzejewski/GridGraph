@@ -48,7 +48,7 @@ void bfs_init(graph g)
 void dijkstra_init(graph g, int vertex_a, int vertex_b)
 {
     int i, j, l;
-    d_result result = dijkstra(g, vertex_a);
+    d_result result = dijkstra(g, vertex_a, vertex_b);
 
     int *nv = malloc(g->height * g->width * sizeof *nv);
 

@@ -32,3 +32,8 @@ clean:
 test: all
 	./gridgraph -w -xh 6 -xw 6 -Wmin 0.5 -Wmax 0.9 -Cmin 1 -Cmax 3 -f "test"
 	./gridgraph -r -c -sA 0 -f "test"
+
+pq_test: all
+	cc -o Tests/pq_test priority_queue.c Tests/priority_queue_test.c
+	Tests/pq_test 1000 Tests/pq_test_result
+	

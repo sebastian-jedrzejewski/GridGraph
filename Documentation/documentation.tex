@@ -27,7 +27,7 @@
 
 
     \begin{abstract}
-        Dokument zawiera specyfikację funkcjonalną oraz implementacyjną dotyczącą projektu \textsl{GridGraph} oraz opis testów programu.
+        Dokument zawiera specyfikację funkcjonalną i implementacyjną dotyczącą projektu \textsl{GridGraph} oraz opis testów programu.
     \end{abstract}
 
 
@@ -1280,5 +1280,55 @@
         Path to 9998 (weight): 0 - 100 - [... pominięto 1781 znaków ...] - 9898 - 9998 (165.863)
 
         Path to 9999 (weight): 0 - 100 - [... pominięto 1788 znaków ...] - 9899 - 9999 (166.64)
+    \end{multiconsole}
+
+
+    \newpage
+    \section{Sprawdzenie poprawności działania kolejki priorytetowej}
+
+    Test polega na posortowaniu 1000 liczb wylosowanych z zakresu od 0 do 1 wykorzystując przy tym kolejkę priorytetową. Wyniki sortowania zapisywane są do pliku „test12” w folderze zawierającym wyniki testów.
+    
+    Plik powinien zawierać 1003 linie. W pierwszej linii powinna być zapisana informacja o sortowaniu kopcowym. Następne 1000 linii to liczby, które powinny być uporządkowane rosnąco. W 1002 linii powinna pojawić się informacja o tym czy kolejka priorytetowa działa poprawnie (program testujący sprawdza również czy liczby na pewno są posortowane). Ostatnia linia powinna być pusta.
+
+    W ramach testu na początku kompilowany jest także program testujący, który na koniec jest usuwany.
+
+    \vspace{2em}
+
+    \textbf{Wywoływane komendy:}
+
+    \vspace{1em}
+
+    \begin{multiconsole}
+        cc -o pq\_test priority\_queue.c ../Tests/priority\_queue\_test.c
+
+        ./pq\_test 1000 [folder zaw. wyn. testów]/test12
+
+        rm pq\_test
+    \end{multiconsole}
+
+    \vspace{2em}
+
+    \textbf{Przykładowy wynik testu zakończonego powodzeniem:}
+
+    Plik "test12":
+
+    \begin{multiconsole}
+        Heap sort:
+
+        0.000368076
+
+        0.000576437
+
+        0.00139771
+
+        [… pominięto 994 linie … ]
+
+        0.998762
+
+        0.99949
+
+        0.999512
+
+        Priority queue works properly.
     \end{multiconsole}
 \end{document}

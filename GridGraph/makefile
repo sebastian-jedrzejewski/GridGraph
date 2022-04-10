@@ -36,7 +36,7 @@ clean:
 
 
 test: all
-	rm -r $(TEST_RESULTS_FOLDER)
+	rm -rf $(TEST_RESULTS_FOLDER)
 	mkdir $(TEST_RESULTS_FOLDER)
 	@echo
 	@echo T1

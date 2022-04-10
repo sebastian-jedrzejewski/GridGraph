@@ -1,8 +1,12 @@
 NAME := gridgraph
+PRIORITY_QUEUE_TEST_NAME := pq_test
 
 DEPENDENCIES_FILE := dep.d
 
 TEST_RESULTS_FOLDER := ./test_results
+
+PRIORITY_QUEUE_SOURCE := priority_queue.c
+PRIORITY_QUEUE_TEST_SOURCE := ../Tests/priority_queue_test.c
 
 SOURCES := $(wildcard *.c)
 OBJECTS := $(SOURCES:%.c=%.o)
@@ -71,3 +75,8 @@ test: all
 	./gridgraph -r -sA 0 -f $(TEST_RESULTS_FOLDER)/test10 > $(TEST_RESULTS_FOLDER)/test11
 	cmp $(TEST_RESULTS_FOLDER)/test11 ../Tests/expected_test11
 	@echo $$?
+	@echo
+	@echo T8
+	cc -o $(PRIORITY_QUEUE_TEST_NAME) $(PRIORITY_QUEUE_SOURCE) $(PRIORITY_QUEUE_TEST_SOURCE)
+	./pq_test 1000 $(TEST_RESULTS_FOLDER)/test12
+	rm $(PRIORITY_QUEUE_TEST_NAME)

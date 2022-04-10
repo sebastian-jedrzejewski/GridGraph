@@ -11,8 +11,8 @@ typedef struct r
 } *d_result;
 
 // FUNCTIONS DECLARATIONS
-d_result result_init(int n, int vertex_a, int *visited);
+d_result result_init(int n, int vertex_a);
 void result_free(d_result result);
-d_result dijkstra(graph graph, int vertex_a);
+d_result dijkstra(graph graph, int vertex_a, int vertex_b);
 
 #endif

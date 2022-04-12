@@ -34,6 +34,7 @@ void graph_free(graph g)
         }
         free(head);
     }
+    free(g->list);
     free(g);
 }
 

@@ -38,7 +38,7 @@ const char* help =
 "--width/-xw                graph width (number of colums) [must be integer]\n"
 "--height/-xh               graph height (number of rows) [must be integer]\n"
 "--edge_weight_min/-Wmin    *edge weight randomizer lower bound [must be >=0; default: 0]\n"
-"--edge_weight_max/-Wmax    *edge weight randomizer upper bound [must be <=1 & >=edge_weight_min & ; default: 1]\n"
+"--edge_weight_max/-Wmax    *edge weight randomizer upper bound [must be >=edge_weight_min & ; default: 1]\n"
 "--edge_count_min/-Cmin     *single-vertex edge count randomizer lower bound (not guaranteed) [must be >=0 & <=edge_count_max & integer; default: 0]\n"
 "--edge_count_max/-Cmax     *single-vertex edge count randomizer upper bound [must be <=4 & >=edge_count_min & integer; default: 4]\n"
 "--seed/-s                  *custom randomizer seed [must be integer]"
@@ -197,11 +197,6 @@ int write_init(int argc, char* argv[])
     if (edge_weight_min < 0)
     {
         fprintf(stderr, "ERROR (Write mode): edge_weight_min must be greater or equal to 0 (%f was given) [EDGE_WEIGHT_MIN_LOWER_THAN_ZERO]\n", edge_weight_min);
-        return EXIT_FAILURE;
-    }
-    if (edge_weight_max > 1)
-    {
-        fprintf(stderr, "ERROR (Write mode): edge_weight_min must be lower or equal to 1 (%f was given) [EDGE_WEIGHT_MAX_GREATER_THAN_ONE]\n", edge_weight_max);
         return EXIT_FAILURE;
     }
     if (edge_weight_min > edge_weight_max)

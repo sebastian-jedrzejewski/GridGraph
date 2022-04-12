@@ -137,7 +137,7 @@
         \item \console{--edge\_weight\_max/-Wmax} (Maksymalna waga pojedyńczej krawędzi)
         \begin{description}
             \item[Typ:] Liczba rzeczywista
-            \item[Zakres:] $<$\console{edge\_weight\_min}, 1$>$
+            \item[Zakres:] $>$ \console{edge\_weight\_min}
             \item[Wymagany:] NIE (domyślnie: 1)
         \end{description}
         \item \console{--edge\_count\_min/-Cmin} (Minimalna liczba krawędzi wychodzących z jednego wierzchołka) \footnote{Program będzie dążył do utworzenia co najmniej \console{edge\_count\_min} krawędzi, ale nie może tego zagwarantować. Nie jest możliwe wygenerowanie więcej niż 2 krawędzi dla wierzchołków w narożnikach oraz więcej niż 3 dla wierzchołków bocznych. Nie jest możliwe także utworzenie krawędzi, jeżeli wszystkie wierzchołki wokół osiągnęły już swoją nominalną (wylosowaną z podanego przedziału) liczbę krawędzi.}
